@@ -8,7 +8,7 @@ export default function Home() {
       <div className="space-y-6">
         <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-50 dark:bg-brand-900/30 text-brand-700 dark:text-brand-300 text-sm font-medium">
           <span className="w-2 h-2 rounded-full bg-brand-500 animate-pulse"></span>
-          Welcome to AuthKit
+          Welcome to AuthJustiph
         </div>
         
         <h1 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 dark:from-white dark:via-slate-200 dark:to-white bg-clip-text text-transparent leading-tight">
