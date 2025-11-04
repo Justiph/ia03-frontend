@@ -1,8 +1,22 @@
 import { useEffect, useState } from 'react';
 import { createBrowserRouter, RouterProvider, Link, Outlet, NavLink } from 'react-router-dom';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import Dashboard from './components/Dashboard';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import SignUp from './pages/SignUp';
+import { AuthProvider } from './context/AuthContext';
+import { ProtectedRoute } from './components/ProtectedRoute';
+import { AuthNav } from './components/AuthNav';
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 1,
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 function ThemeToggle() {
   const [dark, setDark] = useState(() => window.matchMedia('(prefers-color-scheme: dark)').matches);
@@ -45,18 +59,8 @@ function Layout() {
               >
                 Home
               </NavLink>
-              <NavLink 
-                to="/login" 
-                className="nav-link px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
-              >
-                Login
-              </NavLink>
-              <Link 
-                to="/signup" 
-                className="btn-primary px-6 py-2.5 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
-              >
-                Sign Up
-              </Link>
+              
+              <AuthNav />
               <ThemeToggle />
             </div>
 
@@ -97,6 +101,14 @@ const router = createBrowserRouter([
     element: <Layout />,
     children: [
       { index: true, element: <Home /> },
+      {
+        path: 'dashboard',
+        element: (
+          <ProtectedRoute>
+            <Dashboard />
+          </ProtectedRoute>
+        ),
+      },
       { path: 'login', element: <Login /> },
       { path: 'signup', element: <SignUp /> },
     ],
@@ -104,5 +116,11 @@ const router = createBrowserRouter([
 ]);
 
 export default function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <RouterProvider router={router} />
+      </AuthProvider>
+    </QueryClientProvider>
+  );
 }

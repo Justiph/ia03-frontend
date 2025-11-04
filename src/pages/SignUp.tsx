@@ -2,11 +2,12 @@
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Link } from 'react-router-dom';
+import { Link, Navigate, useLocation } from 'react-router-dom';
 import TextInput from '../components/TextInput';
 import Button from '../components/Button';
 import Notice from '../components/Notice';
 import { useRegister } from '../api/user';
+import { useAuth } from '../context/AuthContext';
 
 const schema = z.object({
   email: z.string().email('Please enter a valid email'),
@@ -15,6 +16,8 @@ const schema = z.object({
 type FormData = z.infer<typeof schema>;
 
 export default function SignUp() {
+  const { isLoggedIn } = useAuth();
+  const location = useLocation();
   const {
     register,
     handleSubmit,
@@ -23,6 +26,11 @@ export default function SignUp() {
   const mutation = useRegister();
 
   const onSubmit = (data: FormData) => mutation.mutate(data);
+
+  if (isLoggedIn) {
+    const from = (location.state as any)?.from?.pathname || '/dashboard';
+    return <Navigate to={from} replace />;
+  }
 
   return (
     <div className="w-full max-w-md mx-auto">
@@ -39,7 +47,7 @@ export default function SignUp() {
         {mutation.isError && (
           <Notice
             type="error"
-            message={mutation?.error?.response?.data?.message ?? 'Registration failed'}
+            message={(mutation.error?.response?.data as any)?.message ?? 'Registration failed'}
           />
         )}
 

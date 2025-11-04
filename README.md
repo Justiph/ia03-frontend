@@ -1,6 +1,6 @@
 # IA03 Frontend
 
-A React-based frontend application built with TypeScript, Vite, and Tailwind CSS.
+React (Vite + TypeScript + Tailwind) frontend with JWT auth, Axios interceptors, React Hook Form, and TanStack Query.
 
 ## Prerequisites
 
@@ -89,7 +89,7 @@ src/
 
 ## API Integration
 
-The frontend communicates with the backend API running on `http://localhost:3000`. Make sure the backend is running before starting the frontend.
+The frontend communicates with the backend API (default `http://localhost:3000`). Ensure backend is running.
 
 ## Styling
 
@@ -97,11 +97,13 @@ The application uses Tailwind CSS for styling. The main styles are defined in `s
 
 ## Environment Variables
 
-If you need to configure API endpoints or other environment variables, create a `.env` file in the root directory:
+Create a `.env` in project root:
 
 ```env
-VITE_API_BASE_URL=http://localhost:3000
+VITE_API_BASE=http://localhost:3000
 ```
+
+`VITE_API_BASE` is used by `src/api/client.ts` as Axios baseURL.
 
 ## Development
 
@@ -118,6 +120,21 @@ The development server supports hot module replacement (HMR) for fast developmen
 1. Run `npm run build` to create a production build
 2. The built files will be in the `dist` directory
 3. Deploy the contents of the `dist` directory to your hosting service
+
+### Public Hosting
+
+- You can deploy to Netlify/Vercel/GitHub Pages/Firebase. This repo includes `vercel.json` for Vercel.
+- After deployment, add the public URL here and in the backend README CORS/origin config.
+
+Example: `Public URL: https://your-frontend.vercel.app`
+
+## Routes & Auth
+
+- Public routes: `/` (Home), `/login`, `/signup`
+- Protected routes: `/dashboard` (wrapped by `ProtectedRoute`)
+- After login, navbar shows a “Dashboard” link.
+
+See `FRONTEND_AUTH_FLOW.md` for implementation details.
 
 ## Contributing
 
